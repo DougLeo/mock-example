@@ -1,4 +1,4 @@
-package pl.sly.mock.example.helper;
+package pl.sly.mock.example.data;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,24 +13,24 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Example of mock static final DatabaseManager used in QueryHelper
+ * Example of mock static final DataManager used in DataHelper
  */
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:testContext.xml")
-@PrepareForTest(DatabaseManager.class)
-public class QueryHelperTest {
+@PrepareForTest(DataManager.class)
+public class DataHelperTest {
     @Autowired
-    QueryHelper queryHelper;
+    DataHelper dataHelper;
 
     @Test
     public void testResultOk() {
         //given
-        PowerMockito.mockStatic(DatabaseManager.class);
-        Mockito.when(DatabaseManager.getConnectionUrl()).thenReturn("connection");
+        PowerMockito.mockStatic(DataManager.class);
+        Mockito.when(DataManager.getDataUrl()).thenReturn("connection");
 
         //when
-        String result = queryHelper.invokeQuery();
+        String result = dataHelper.invokeQuery();
 
         //then
         Assert.assertNotNull(result);
@@ -39,11 +39,11 @@ public class QueryHelperTest {
     @Test
     public void testResultNotOk() {
         //given
-        PowerMockito.mockStatic(DatabaseManager.class);
-        Mockito.when(DatabaseManager.getConnectionUrl()).thenReturn(null);
+        PowerMockito.mockStatic(DataManager.class);
+        Mockito.when(DataManager.getDataUrl()).thenReturn(null);
 
         //when
-        String result = queryHelper.invokeQuery();
+        String result = dataHelper.invokeQuery();
 
         //then
         Assert.assertNull(result);
@@ -52,13 +52,13 @@ public class QueryHelperTest {
     @Test
     public void testStaticReload() {
         //given
-        PowerMockito.mockStatic(DatabaseManager.class);
+        PowerMockito.mockStatic(DataManager.class);
 
         //when
-        queryHelper.callStaticReload();
+        dataHelper.invokeReload();
 
         //then
         PowerMockito.verifyStatic();
-        DatabaseManager.reload();
+        DataManager.reload();
     }
 }
